@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from datetime import datetime
+from django.utils import timezone
 from .models import Question
 from .models import Choice
 
@@ -14,15 +15,29 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        return Question.objects.order_by('-pub_date')[:5]
+        """ Returns the Query set of the last 5 questions published in the past"""
+        questionWithChoices = []
+        for q in Question.objects.all():
+            if q.choice_set.count() > 0:
+                questionWithChoices.append(q.question_text)
+                
+        questions = Question.objects.filter(pub_date__lte = timezone.now(),
+                                            question_text__in=questionWithChoices)
+        return questions.order_by('-pub_date')[:5]
 
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte = timezone.now())
+
 class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
+
+    def get_queryset(self):
+        return Question.objects.filter(pub_date__lte = timezone.now())
 
 # def index(request):
 #     latest_question_list = Question.objects.order_by('-pub_date')[:5]
