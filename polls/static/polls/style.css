@@ -1,0 +1,10 @@
+li a {
+    color: green;
+    font-size: 1.3em;
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+body {
+  background: black url("images/background.gif");
+}

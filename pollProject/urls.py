@@ -16,6 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+#admin site settings
+admin.site.site_header = 'Polls app admin site'
+admin.site.site_title = 'Polls app admin site'
+admin.site.site_url = 'http://127.0.0.1:8000/polls/'
+admin.site.index_title = 'Polls app admin site'
+admin.empty_value_display = '**Empty**'
+
 urlpatterns = [
     path('polls/', include('polls.urls')),
     path('admin/', admin.site.urls),
